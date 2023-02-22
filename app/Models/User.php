@@ -10,13 +10,33 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ * @property integer $id
+ * @property integer $role_id
+ * @property string $firstname
+ * @property string $lastname
+ * @property string $email
+ * @property string $phone
+ * @property string $email_verified_at
+ * @property string $password
+ * @property string $two_factor_secret
+ * @property string $two_factor_recovery_codes
+ * @property string $two_factor_confirmed_at
+ * @property string $address
+ * @property string $plz
+ * @property string $city
+ * @property string $country
+ * @property string $profile_photo_path
+ * @property string $remember_token
+ * @property integer $current_team_id
+ * @property string $created_at
+ * @property string $updated_at
+ * @property Role $role
+ * @property Task[] $tasks
+ */
 class User extends Authenticatable
 {
-    use HasApiTokens;
-    use HasFactory;
-    use HasProfilePhoto;
-    use Notifiable;
-    use TwoFactorAuthenticatable;
+    use HasApiTokens, HasFactory, HasProfilePhoto, Notifiable, TwoFactorAuthenticatable;
 
     /**
      * The attributes that are mass assignable.
@@ -24,8 +44,14 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'firstname',
+        'lastname',
         'email',
+        'phone',
+        'address',
+        'plz',
+        'city',
+        'country',
         'password',
     ];
 
@@ -58,4 +84,20 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function role()
+    {
+        return $this->belongsTo('App\Models\Role');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function tasks()
+    {
+        return $this->belongsToMany('App\Models\Task');
+    }
 }
