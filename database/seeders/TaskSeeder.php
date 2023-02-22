@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Task;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class TaskSeeder extends Seeder
 {
@@ -12,6 +14,11 @@ class TaskSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Task::factory(20)->create();
+        Task::factory(20)->create();
+
+        foreach(User::all() as $user) {
+            $user->tasks()->attach(Task::all()->random());
+        }
+
     }
 }
